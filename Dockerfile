@@ -17,10 +17,12 @@ RUN wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import - && \
 
 # Install Swift Ubuntu 15.10 Snapshot
 RUN SWIFT_ARCHIVE_NAME=swift-$SWIFT_VERSION-$SWIFT_PLATFORM && \
-    SWIFT_URL='https://swift.org/builds/development/ubuntu1510/swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a/swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a-ubuntu15.10.tar.gz' && \
+    SWIFT_URL=https://swift.org/builds/$SWIFT_BRANCH/$(echo "$SWIFT_PLATFORM" | tr -d .)/swift-$SWIFT_VERSION/$SWIFT_ARCHIVE_NAME.tar.gz && \
     wget $SWIFT_URL && \
-    tar -xvzf swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a-ubuntu15.10.tar.gz --directory / --strip-components=1 && \
-    rm -rf swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a-ubuntu15.10* /tmp/* /var/tmp/*
+    wget $SWIFT_URL.sig && \
+    gpg --verify $SWIFT_ARCHIVE_NAME.tar.gz.sig && \
+    tar -xvzf $SWIFT_ARCHIVE_NAME.tar.gz --directory / --strip-components=1 && \
+    rm -rf $SWIFT_ARCHIVE_NAME* /tmp/* /var/tmp/*
 
 # Set Swift Path
 ENV PATH /usr/bin:$PATH
