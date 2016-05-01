@@ -1,0 +1,10 @@
+applications:
+- path: .
+  memory: 128M
+  instances: 1
+  domain: au-syd.mybluemix.net
+  name: sample-swift-server
+  host: sample-swift-server
+  disk_quota: 1024M
+  buildpack: swift_buildpack
+
